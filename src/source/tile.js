@@ -596,14 +596,16 @@ class Tile {
         this.symbolFadeHoldUntil = browser.now() + duration;
     }
 
-    setTexture(img: TextureImage, painter: Painter) {
+    setTexture(img: TextureImage, painter: Painter, format) {
         const context = painter.context;
         const gl = context.gl;
         this.texture = this.texture || painter.getTileTexture(img.width);
         if (this.texture) {
+            console.log("A")
             this.texture.update(img, {useMipmap: true});
         } else {
-            this.texture = new Texture(context, img, gl.RGBA, {useMipmap: true});
+            console.log("in")
+            this.texture = new Texture(context, img, gl[format], {useMipmap: true});
             this.texture.bind(gl.LINEAR, gl.CLAMP_TO_EDGE);
 
             if (context.extTextureFilterAnisotropic) {

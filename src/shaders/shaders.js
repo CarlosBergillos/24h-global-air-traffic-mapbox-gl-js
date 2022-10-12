@@ -45,6 +45,8 @@ import linePatternFrag from './line_pattern.fragment.glsl';
 import linePatternVert from './line_pattern.vertex.glsl';
 import rasterFrag from './raster.fragment.glsl';
 import rasterVert from './raster.vertex.glsl';
+import customRasterFrag from './custom_raster.fragment.glsl';
+import customRasterVert from './custom_raster.vertex.glsl';
 import symbolIconFrag from './symbol_icon.fragment.glsl';
 import symbolIconVert from './symbol_icon.vertex.glsl';
 import symbolSDFFrag from './symbol_sdf.fragment.glsl';
@@ -144,6 +146,7 @@ export default {
     line: compile(lineFrag, lineVert),
     linePattern: compile(linePatternFrag, linePatternVert),
     raster: compile(rasterFrag, rasterVert),
+    customRaster: compile(customRasterFrag, customRasterVert),
     symbolIcon: compile(symbolIconFrag, symbolIconVert),
     symbolSDF: compile(symbolSDFFrag, symbolSDFVert),
     symbolTextAndIcon: compile(symbolTextAndIconFrag, symbolTextAndIconVert),

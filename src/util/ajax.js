@@ -309,7 +309,7 @@ export const resetImageRequestQueue = () => {
 };
 resetImageRequestQueue();
 
-export const getImage = function(requestParameters: RequestParameters, callback: ResponseCallback<HTMLImageElement | ImageBitmap>): Cancelable {
+export const getImage = function(requestParameters: RequestParameters, callback: ResponseCallback<HTMLImageElement | ImageBitmap>, raw: ?boolean): Cancelable {
     if (webpSupported.supported) {
         if (!requestParameters.headers) {
             requestParameters.headers = {};
@@ -354,10 +354,14 @@ export const getImage = function(requestParameters: RequestParameters, callback:
         if (err) {
             callback(err);
         } else if (data) {
-            if (window.createImageBitmap) {
-                arrayBufferToImageBitmap(data, (err, imgBitmap) => callback(err, imgBitmap, cacheControl, expires));
+            if (raw) {
+                callback(null, data, cacheControl, expires)
             } else {
-                arrayBufferToImage(data, (err, img) => callback(err, img, cacheControl, expires));
+                if (window.createImageBitmap) {
+                    arrayBufferToImageBitmap(data, (err, imgBitmap) => callback(err, imgBitmap, cacheControl, expires));
+                } else {
+                    arrayBufferToImage(data, (err, img) => callback(err, img, cacheControl, expires));
+                }
             }
         }
     });

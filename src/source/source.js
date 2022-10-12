@@ -109,6 +109,7 @@ const sourceTypes = {
     vector,
     raster,
     'raster-dem': rasterDem,
+    'raster-raw': raster,
     geojson,
     video,
     image,

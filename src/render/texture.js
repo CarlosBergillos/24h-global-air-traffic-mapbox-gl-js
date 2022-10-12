@@ -3,7 +3,7 @@
 import window from '../util/window.js';
 
 import type Context from '../gl/context.js';
-import type {RGBAImage, AlphaImage} from '../util/image.js';
+import type {RGBAImage, RAImage, AlphaImage} from '../util/image.js';
 
 export type TextureFormat =
     | $PropertyType<WebGLRenderingContext, 'RGBA'>
@@ -25,6 +25,7 @@ type EmptyImage = {
 
 export type TextureImage =
     | RGBAImage
+    | RAImage
     | AlphaImage
     | HTMLImageElement
     | HTMLCanvasElement
@@ -72,12 +73,13 @@ class Texture {
             }
 
         } else {
+            // taking a subtile region?
             const {x, y} = position || {x: 0, y: 0};
             if (image instanceof HTMLImageElement || image instanceof HTMLCanvasElement || image instanceof HTMLVideoElement || image instanceof ImageData || (ImageBitmap && image instanceof ImageBitmap)) {
-                gl.texSubImage2D(gl.TEXTURE_2D, 0, x, y, gl.RGBA, gl.UNSIGNED_BYTE, image);
+                gl.texSubImage2D(gl.TEXTURE_2D, 0, x, y, this.format, gl.UNSIGNED_BYTE, image);
             } else {
                 // $FlowFixMe prop-missing - Flow can't refine image type here
-                gl.texSubImage2D(gl.TEXTURE_2D, 0, x, y, width, height, gl.RGBA, gl.UNSIGNED_BYTE, image.data);
+                gl.texSubImage2D(gl.TEXTURE_2D, 0, x, y, width, height, this.format, gl.UNSIGNED_BYTE, image.data);
             }
         }
 

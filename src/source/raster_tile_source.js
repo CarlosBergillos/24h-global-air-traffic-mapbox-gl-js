@@ -20,13 +20,14 @@ import type Tile from './tile.js';
 import type {Callback} from '../types/callback.js';
 import type {Cancelable} from '../types/cancelable.js';
 import type {TextureImage} from '../render/texture.js';
+import { RAImage } from '../util/image.js';
 import type {
     RasterSourceSpecification,
     RasterDEMSourceSpecification
 } from '../style-spec/types.js';
 
 class RasterTileSource extends Evented implements Source {
-    type: 'raster' | 'raster-dem';
+    type: 'raster' | 'raster-dem' | 'raster-raw';
     id: string;
     minzoom: number;
     maxzoom: number;
@@ -51,7 +52,7 @@ class RasterTileSource extends Evented implements Source {
         this.dispatcher = dispatcher;
         this.setEventedParent(eventedParent);
 
-        this.type = 'raster';
+        this.type = options.type;
         this.minzoom = 0;
         this.maxzoom = 22;
         this.roundZoom = true;
@@ -113,6 +114,8 @@ class RasterTileSource extends Evented implements Source {
     loadTile(tile: Tile, callback: Callback<void>) {
         const use2x = browser.devicePixelRatio >= 2;
         const url = this.map._requestManager.normalizeTileURL(tile.tileID.canonical.url(this.tiles, this.scheme), use2x, this.tileSize);
+        const isRaw = this.type == "raster-raw";
+        const format = isRaw ? 'LUMINANCE_ALPHA' : 'RGBA';  // TODO: not accurate, not generalized
         tile.request = getImage(this.map._requestManager.transformRequest(url, ResourceType.Tile), (error, data, cacheControl, expires) => {
             delete tile.request;
 
@@ -129,12 +132,18 @@ class RasterTileSource extends Evented implements Source {
             if (!data) return callback(null);
 
             if (this.map._refreshExpiredTiles) tile.setExpiryData({cacheControl, expires});
-            tile.setTexture(data, this.map.painter);
+
+            if (isRaw && format == "LUMINANCE_ALPHA"){ // TODO: not accurate, not generalized
+                data = new RAImage({width: this.tileSize, height: this.tileSize}, new Uint8Array(data))
+                console.log(tile.tileID.canonical, data)
+            }
+
+            tile.setTexture(data, this.map.painter, format);
             tile.state = 'loaded';
 
             cacheEntryPossiblyAdded(this.dispatcher);
             callback(null);
-        });
+        }, isRaw);
     }
 
     static loadTileData(tile: Tile, data: TextureImage, painter: Painter) {

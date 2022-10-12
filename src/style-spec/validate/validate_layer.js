@@ -73,7 +73,7 @@ export default function validateLayer(options: Options): Array<ValidationError> 
                 errors.push(new ValidationError(key, layer.source, `source "${layer.source}" not found`));
             } else if (sourceType === 'vector' && type === 'raster') {
                 errors.push(new ValidationError(key, layer.source, `layer "${layer.id}" requires a raster source`));
-            } else if (sourceType === 'raster' && type !== 'raster') {
+            } else if (sourceType === 'raster' && (type !== 'raster' && type !== 'custom-raster')) {
                 errors.push(new ValidationError(key, layer.source, `layer "${layer.id}" requires a vector source`));
             } else if (sourceType === 'vector' && !layer['source-layer']) {
                 errors.push(new ValidationError(key, layer, `layer "${layer.id}" must specify a "source-layer"`));

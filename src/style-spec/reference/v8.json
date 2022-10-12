@@ -599,6 +599,9 @@
             }
           }
         },
+        "custom-raster": {
+          "doc": "Raster map textures such as satellite imagery, using custom shaders."
+        },
         "hillshade": {
           "doc": "Client-side hillshading visualization based on DEM data. Currently, the implementation only supports Mapbox Terrain RGB and Mapzen Terrarium tiles.",
           "sdk-support": {

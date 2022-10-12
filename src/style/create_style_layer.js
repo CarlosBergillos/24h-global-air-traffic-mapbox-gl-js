@@ -10,6 +10,7 @@ import line from './style_layer/line_style_layer.js';
 import symbol from './style_layer/symbol_style_layer.js';
 import background from './style_layer/background_style_layer.js';
 import raster from './style_layer/raster_style_layer.js';
+import customRaster from './style_layer/custom_raster_style_layer.js';
 import CustomStyleLayer from './style_layer/custom_style_layer.js';
 import sky from './style_layer/sky_style_layer.js';
 import type {CustomLayerInterface} from './style_layer/custom_style_layer.js';
@@ -26,6 +27,7 @@ const subclasses = {
     symbol,
     background,
     raster,
+    'custom-raster': customRaster,
     sky
 };
 

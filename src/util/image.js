@@ -109,6 +109,43 @@ export class AlphaImage {
 
 // Not premultiplied, because ImageData is not premultiplied.
 // UNPACK_PREMULTIPLY_ALPHA_WEBGL must be used when uploading to a texture.
+export class RAImage {
+    width: number;
+    height: number;
+
+    // data must be a Uint8Array instead of Uint8ClampedArray because texImage2D does not
+    // support Uint8ClampedArray in all browsers
+    data: Uint8Array;
+
+    constructor(size: Size, data?: Uint8Array | Uint8ClampedArray) {
+        createImage(this, size, 2, data);
+    }
+
+    resize(size: Size) {
+        resizeImage(this, new RAImage(size), 2);
+    }
+
+    replace(data: Uint8Array | Uint8ClampedArray, copy?: boolean) {
+        if (copy) {
+            this.data.set(data);
+        } else if (data instanceof Uint8ClampedArray) {
+            this.data = new Uint8Array(data.buffer);
+        } else {
+            this.data = data;
+        }
+    }
+
+    clone(): RAImage {
+        return new RAImage({width: this.width, height: this.height}, new Uint8Array(this.data));
+    }
+
+    static copy(srcImg: RAImage | ImageData, dstImg: RAImage, srcPt: Point, dstPt: Point, size: Size) {
+        copyImage(srcImg, dstImg, srcPt, dstPt, size, 2);
+    }
+}
+
+// Not premultiplied, because ImageData is not premultiplied.
+// UNPACK_PREMULTIPLY_ALPHA_WEBGL must be used when uploading to a texture.
 export class RGBAImage {
     width: number;
     height: number;
@@ -145,4 +182,5 @@ export class RGBAImage {
 }
 
 register(AlphaImage, 'AlphaImage');
+register(RAImage, 'RAImage');
 register(RGBAImage, 'RGBAImage');

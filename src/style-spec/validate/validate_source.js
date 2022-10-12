@@ -94,7 +94,7 @@ export default function validateSource(options: ValidationOptions): Array<Valida
         return validateEnum({
             key: `${key}.type`,
             value: value.type,
-            valueSpec: {values: ['vector', 'raster', 'raster-dem', 'geojson', 'video', 'image']},
+            valueSpec: {values: ['vector', 'raster', 'raster-dem', 'raster-raw', 'geojson', 'video', 'image']},
             style,
             styleSpec
         });

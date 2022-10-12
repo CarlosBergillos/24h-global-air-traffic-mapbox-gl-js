@@ -102,6 +102,7 @@ class SourceCache extends Evented {
         this._isRaster =
             this._source.type === 'raster' ||
             this._source.type === 'raster-dem' ||
+            this._source.type === 'raster-raw' ||
             // $FlowFixMe[prop-missing]
             (this._source.type === 'custom' && this._source._dataType === 'raster');
     }
@@ -1042,7 +1043,7 @@ function compareTileId(a: OverscaledTileID, b: OverscaledTileID): number {
 }
 
 function isRasterType(type): boolean {
-    return type === 'raster' || type === 'image' || type === 'video' || type === 'custom';
+    return type === 'raster' || type === 'raster-raw' || type === 'image' || type === 'video' || type === 'custom';
 }
 
 function tileBoundsX(id: CanonicalTileID, wrap: number): [number, number] {

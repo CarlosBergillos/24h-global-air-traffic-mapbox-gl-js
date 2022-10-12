@@ -36,7 +36,7 @@ function getAllowedKeyErrors(obj: Object, keys: Array<*>, path: ?string): Array<
     return errors;
 }
 
-const acceptedSourceTypes = new Set(["vector", "raster", "raster-dem"]);
+const acceptedSourceTypes = new Set(["vector", "raster", "raster-dem", "raster-raw"]);
 function getSourceErrors(source: Object, i: number): Array<ValidationError> {
     const errors = [];
 

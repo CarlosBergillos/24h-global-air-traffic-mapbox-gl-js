@@ -13,6 +13,7 @@ import {heatmapUniforms, heatmapTextureUniforms} from './heatmap_program.js';
 import {hillshadeUniforms, hillshadePrepareUniforms} from './hillshade_program.js';
 import {lineUniforms, linePatternUniforms} from './line_program.js';
 import {rasterUniforms} from './raster_program.js';
+import {customRasterUniforms} from './custom_raster_program.js';
 import {symbolIconUniforms, symbolSDFUniforms, symbolTextAndIconUniforms} from './symbol_program.js';
 import {backgroundUniforms, backgroundPatternUniforms} from './background_program.js';
 import {terrainRasterUniforms} from '../../terrain/terrain_raster_program.js';
@@ -44,6 +45,7 @@ export const programUniforms = {
     line: lineUniforms,
     linePattern: linePatternUniforms,
     raster: rasterUniforms,
+    customRaster: customRasterUniforms,
     symbolIcon: symbolIconUniforms,
     symbolSDF: symbolSDFUniforms,
     symbolTextAndIcon: symbolTextAndIconUniforms,
