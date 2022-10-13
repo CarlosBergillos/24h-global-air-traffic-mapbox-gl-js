@@ -12,9 +12,9 @@ import type RasterStyleLayer from '../style/style_layer/raster_style_layer.js';
 import type {OverscaledTileID} from '../source/tile_id.js';
 import rasterFade from './raster_fade.js';
 
-export default drawRaster;
+export default drawCustomRaster;
 
-function drawRaster(painter: Painter, sourceCache: SourceCache, layer: CustomRasterStyleLayer, tileIDs: Array<OverscaledTileID>, variableOffsets: any, isInitialLoad: boolean) {
+function drawCustomRaster(painter: Painter, sourceCache: SourceCache, layer: CustomRasterStyleLayer, tileIDs: Array<OverscaledTileID>, variableOffsets: any, isInitialLoad: boolean) {
     if (painter.renderPass !== 'translucent') return;
     if (layer.paint.get('raster-opacity') === 0) return;
     if (!tileIDs.length) return;
