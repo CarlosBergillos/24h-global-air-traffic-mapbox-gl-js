@@ -44,9 +44,8 @@ float zoomAdd(float z) {
 
 
 vec4 colorMap(float k, vec4 baseColor, float a) {
-    // vec4 c2 = vec4(0.16, 0.086, 0.301, 0.1);  // #16174d
     vec4 outColor = vec4(0.0);
-    outColor.rgb = baseColor.rgb * baseColor.a * k * a;
+    outColor.rgb = baseColor.rgb * baseColor.a * k;
     outColor.a = a;
     outColor = clamp(outColor, 0.0, 1.0);
     return outColor;
@@ -57,19 +56,13 @@ vec4 renderPixel(vec4 rawColor) {
     float zm = zoomMult(u_zoom);
     float za = zoomAdd(u_zoom);
 
-    // vec3 channelsMask = vec3(u_channels & 0x01, u_channels & 0x02, u_channels & 0x04);
-    // vec3 p = texture(u_image, v_texCoord).rgb * channelsMask.rgb;
-    float v0 = rawColor.r;
-    float c0 = v0 * 255.0;
-    // float k0 = max(c0, 10.0);
-    float k0 = c0;
+    float c0 = rawColor.r * 255.0;
+    float k0 = c0 * u_c0_opacity;
     float a0 = clamp(c0, 0.0, 1.0) * u_c0_opacity;
     k0 = (k0 * zm) + (za * min(1.0, k0));
 
-    float v1 = rawColor.a;
-    float c1 = v1 * 255.0;
-    // float k1 = max(c1, 10.0);
-    float k1 = c1;
+    float c1 = rawColor.a * 255.0;
+    float k1 = c1 * u_c1_opacity;
     float a1 = clamp(c1, 0.0, 1.0) * u_c1_opacity;
     k1 = (k1 * zm) + (za * min(1.0, k1));
 
@@ -79,31 +72,14 @@ vec4 renderPixel(vec4 rawColor) {
 
 
 void main() {
-
     // read and cross-fade colors from the main and parent tiles
-    vec4 color0 = texture2D(u_image0, v_pos0);
-    vec4 color1 = texture2D(u_image1, v_pos1);
+    vec4 color0 = texture2D(u_image0, v_pos0, 0.0);
+    vec4 color1 = texture2D(u_image1, v_pos1, 0.0);
     
     color0 = renderPixel(color0);  // TODO: different textures are part of a different zoom level?
     color1 = renderPixel(color1);  // TODO: different textures are part of a different zoom level?
 
-    // "un-premultiply" alpha?
-    // if (color0.a > 0.0) {
-    //     color0.rgb = color0.rgb / color0.a;
-    // }
-    // if (color1.a > 0.0) {
-    //     color1.rgb = color1.rgb / color1.a;
-    // }
-
     vec4 color = mix(color0, color1, u_fade_t);
-    // color.a *= u_opacity;
-    // vec3 rgb = color.rgb;
-
-    // if (color.a < 0.01) {
-    //     rgb = vec3(1.0);
-    // }
-
-    // vec3 out_color= rgb;
 
 #ifdef FOG
     // disable fog
@@ -115,11 +91,4 @@ void main() {
 #ifdef OVERDRAW_INSPECTOR
     gl_FragColor = vec4(1.0);
 #endif
-    // if (v_pos0.x > 0.5) {
-    //     color = vec4(1.0); 
-    // } else {
-    //     color = vec4(0.0); 
-    // }
-    // // color = vec4(1.0, 1.0, 1.0, v_pos0.x); 
-    // gl_FragColor = vec4(color.rgb * color.a, color.a);
 }
