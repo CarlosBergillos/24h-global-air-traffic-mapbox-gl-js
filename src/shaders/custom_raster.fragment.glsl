@@ -15,11 +15,12 @@ uniform vec3 u_spin_weights;
 uniform float u_zoom;
 uniform float u_c0_opacity;
 uniform float u_c1_opacity;
+uniform float u_intensity;
 
 
 
 float zoomMult(float z) {
-    float MIN_Z = 2.0;
+    float MIN_Z = 1.0;
     float MAX_Z = 11.0;
     float MIN_MULT = 0.5;
     float MAX_MULT = 8.0;
@@ -31,7 +32,7 @@ float zoomMult(float z) {
 }
 
 float zoomAdd(float z) {
-    float MIN_Z = 2.0;
+    float MIN_Z = 1.0;
     float MAX_Z = 11.0;
     float MIN_ADD = 4.0;
     float MAX_ADD = 8.0;
@@ -56,12 +57,14 @@ vec4 renderPixel(vec4 rawColor) {
     float zm = zoomMult(u_zoom);
     float za = zoomAdd(u_zoom);
 
-    float c0 = rawColor.r * 255.0;
+    float p = u_intensity;
+
+    float c0 = clamp(pow(rawColor.r, p), 0.0, 1.0) * 255.0;
     float k0 = c0 * u_c0_opacity;
     float a0 = clamp(c0, 0.0, 1.0) * u_c0_opacity;
     k0 = (k0 * zm) + (za * min(1.0, k0));
 
-    float c1 = rawColor.a * 255.0;
+    float c1 = clamp(pow(rawColor.a, p), 0.0, 1.0) * 255.0;
     float k1 = c1 * u_c1_opacity;
     float a1 = clamp(c1, 0.0, 1.0) * u_c1_opacity;
     k1 = (k1 * zm) + (za * min(1.0, k1));

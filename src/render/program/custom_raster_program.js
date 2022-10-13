@@ -29,6 +29,7 @@ export type RasterUniformsType = {|
     'u_zoom': Uniform1f,
     'u_c0_opacity': Uniform1f,
     'u_c1_opacity': Uniform1f,
+    'u_intensity': Uniform1f,
 |};
 
 const customRasterUniforms = (context: Context): RasterUniformsType => ({
@@ -48,6 +49,7 @@ const customRasterUniforms = (context: Context): RasterUniformsType => ({
     'u_zoom': new Uniform1f(context),
     'u_c0_opacity': new Uniform1f(context),
     'u_c1_opacity': new Uniform1f(context),
+    'u_intensity': new Uniform1f(context),
 });
 
 const customRasterUniformValues = (
@@ -75,6 +77,7 @@ const customRasterUniformValues = (
     'u_zoom': zoom,
     'u_c0_opacity': layer.c0_opacity ?? 1.0,
     'u_c1_opacity': layer.c1_opacity ?? 1.0,
+    'u_intensity': layer.intensity ?? 1.0,
 });
 
 function spinWeights(angle) {
