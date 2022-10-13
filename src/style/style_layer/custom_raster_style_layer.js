@@ -8,7 +8,7 @@ import {Transitionable, Transitioning, PossiblyEvaluated} from '../properties.js
 import type {PaintProps} from './raster_style_layer_properties.js';
 import type {LayerSpecification} from '../../style-spec/types.js';
 
-class RasterStyleLayer extends StyleLayer {
+class CustomRasterStyleLayer extends StyleLayer {
     _transitionablePaint: Transitionable<PaintProps>;
     _transitioningPaint: Transitioning<PaintProps>;
     paint: PossiblyEvaluated<PaintProps>;
@@ -22,4 +22,4 @@ class RasterStyleLayer extends StyleLayer {
     }
 }
 
-export default RasterStyleLayer;
+export default CustomRasterStyleLayer;

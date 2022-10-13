@@ -135,7 +135,6 @@ class RasterTileSource extends Evented implements Source {
 
             if (isRaw && format == "LUMINANCE_ALPHA"){ // TODO: not accurate, not generalized
                 data = new RAImage({width: this.tileSize, height: this.tileSize}, new Uint8Array(data))
-                console.log(tile.tileID.canonical, data)
             }
 
             tile.setTexture(data, this.map.painter, format);

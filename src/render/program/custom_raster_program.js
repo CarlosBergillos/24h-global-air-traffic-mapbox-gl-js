@@ -10,7 +10,7 @@ import {
 
 import type Context from '../../gl/context.js';
 import type {UniformValues} from '../uniform_binding.js';
-import type RasterStyleLayer from '../../style/style_layer/raster_style_layer.js';
+import type CustomRasterStyleLayer from '../../style/style_layer/custom_raster_style_layer.js';
 
 export type RasterUniformsType = {|
     'u_matrix': UniformMatrix4f,
@@ -27,6 +27,8 @@ export type RasterUniformsType = {|
     'u_spin_weights': Uniform3f,
     'u_perspective_transform': Uniform2f,
     'u_zoom': Uniform1f,
+    'u_c0_opacity': Uniform1f,
+    'u_c1_opacity': Uniform1f,
 |};
 
 const customRasterUniforms = (context: Context): RasterUniformsType => ({
@@ -44,6 +46,8 @@ const customRasterUniforms = (context: Context): RasterUniformsType => ({
     'u_spin_weights': new Uniform3f(context),
     'u_perspective_transform': new Uniform2f(context),
     'u_zoom': new Uniform1f(context),
+    'u_c0_opacity': new Uniform1f(context),
+    'u_c1_opacity': new Uniform1f(context),
 });
 
 const customRasterUniformValues = (
@@ -51,7 +55,7 @@ const customRasterUniformValues = (
     parentTL: [number, number],
     parentScaleBy: number,
     fade: {mix: number, opacity: number},
-    layer: RasterStyleLayer,
+    layer: CustomRasterStyleLayer,
     perspectiveTransform: [number, number],
     zoom,
 ): UniformValues<RasterUniformsType> => ({
@@ -69,6 +73,8 @@ const customRasterUniformValues = (
     'u_spin_weights': spinWeights(layer.paint.get('raster-hue-rotate')),
     'u_perspective_transform': perspectiveTransform,
     'u_zoom': zoom,
+    'u_c0_opacity': layer.c0_opacity ?? 1.0,
+    'u_c1_opacity': layer.c1_opacity ?? 1.0,
 });
 
 function spinWeights(angle) {
