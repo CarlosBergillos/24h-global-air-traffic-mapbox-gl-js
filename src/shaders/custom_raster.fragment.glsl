@@ -13,6 +13,8 @@ uniform float u_contrast_factor;
 uniform vec3 u_spin_weights;
 
 uniform float u_zoom;
+uniform vec4 u_c0_color;
+uniform vec4 u_c1_color;
 uniform float u_c0_opacity;
 uniform float u_c1_opacity;
 uniform float u_intensity;
@@ -69,8 +71,8 @@ vec4 renderPixel(vec4 rawColor) {
     float a1 = clamp(c1, 0.0, 1.0) * u_c1_opacity;
     k1 = (k1 * zm) + (za * min(1.0, k1));
 
-    return colorMap(k0, vec4(0.301, 0.09, 0.086, 0.1), a0)
-        + colorMap(k1, vec4(0.16, 0.086, 0.301, 0.2), a1);
+    return colorMap(k0, u_c0_color, a0)
+        + colorMap(k1, u_c1_color, a1);
 }
 
 

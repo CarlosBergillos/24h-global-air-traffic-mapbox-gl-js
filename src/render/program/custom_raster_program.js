@@ -5,8 +5,10 @@ import {
     Uniform1f,
     Uniform2f,
     Uniform3f,
-    UniformMatrix4f
+    UniformMatrix4f,
+    UniformColor
 } from '../uniform_binding.js';
+import Color from "../../style-spec/util/color.js";
 
 import type Context from '../../gl/context.js';
 import type {UniformValues} from '../uniform_binding.js';
@@ -27,6 +29,8 @@ export type RasterUniformsType = {|
     'u_spin_weights': Uniform3f,
     'u_perspective_transform': Uniform2f,
     'u_zoom': Uniform1f,
+    'u_c0_color': UniformColor,
+    'u_c1_color': UniformColor,
     'u_c0_opacity': Uniform1f,
     'u_c1_opacity': Uniform1f,
     'u_intensity': Uniform1f,
@@ -47,6 +51,8 @@ const customRasterUniforms = (context: Context): RasterUniformsType => ({
     'u_spin_weights': new Uniform3f(context),
     'u_perspective_transform': new Uniform2f(context),
     'u_zoom': new Uniform1f(context),
+    'u_c0_color': new UniformColor(context),
+    'u_c1_color': new UniformColor(context),
     'u_c0_opacity': new Uniform1f(context),
     'u_c1_opacity': new Uniform1f(context),
     'u_intensity': new Uniform1f(context),
@@ -75,6 +81,8 @@ const customRasterUniformValues = (
     'u_spin_weights': spinWeights(layer.paint.get('raster-hue-rotate')),
     'u_perspective_transform': perspectiveTransform,
     'u_zoom': zoom,
+    'u_c0_color': layer.c0_color ? new Color(...layer.c0_color) : Color.transparent,
+    'u_c1_color': layer.c1_color ? new Color(...layer.c1_color) : Color.transparent,
     'u_c0_opacity': layer.c0_opacity ?? 1.0,
     'u_c1_opacity': layer.c1_opacity ?? 1.0,
     'u_intensity': layer.intensity ?? 1.0,
