@@ -22,7 +22,7 @@ function drawCustomRaster(painter: Painter, sourceCache: SourceCache, layer: Cus
     const context = painter.context;
     const gl = context.gl;
     const source = sourceCache.getSource();
-    const program = painter.useProgram('customRaster');
+    const program = painter.useCustomProgram(layer.fragShader, layer.vertShader);
 
     const colorMode = painter.colorModeForRenderPass();
 

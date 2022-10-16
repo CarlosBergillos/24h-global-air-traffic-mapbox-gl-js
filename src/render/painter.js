@@ -48,6 +48,7 @@ import {Terrain} from '../terrain/terrain.js';
 import {Debug} from '../util/debug.js';
 import Tile from '../source/tile.js';
 import {RGBAImage} from '../util/image.js';
+import {compile} from '../shaders/shaders.js';
 
 const draw = {
     symbol,
@@ -892,6 +893,21 @@ class Painter {
 
         if (!this.cache[key]) {
             this.cache[key] = new Program(this.context, name, shaders[name], programConfiguration, programUniforms[name], allDefines);
+        }
+        return this.cache[key];
+    }
+
+    useCustomProgram(fragShader, vertShader) {
+        this.cache = this.cache || {};
+        const defines = [];
+
+        const globalDefines = this.currentGlobalDefines();
+        const allDefines = globalDefines.concat(defines);
+        const key = Program.customCacheKey(fragShader, vertShader);
+
+        if (!this.cache[key]) {
+            const shaderSource = compile(fragShader, vertShader);
+            this.cache[key] = new Program(this.context, 'custom_raster_shader', shaderSource, null, programUniforms['customRaster'], allDefines);
         }
         return this.cache[key];
     }
